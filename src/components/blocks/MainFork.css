@@ -1,0 +1,21 @@
+.mainfork {
+  margin: 0 20px;
+  position: relative;
+  height: calc(100vh - 45px);
+}
+
+.mainfork-wrapper > button {
+  margin-bottom: 12px;
+}
+
+.mainfork-wrapper {
+  width: 100%;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+
+.mainfork-wrapper .FormField  {
+  margin: 0 !important;
+}

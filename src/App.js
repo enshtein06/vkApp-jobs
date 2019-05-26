@@ -1,17 +1,17 @@
 import React from 'react';
 import connect from '@vkontakte/vkui-connect';
-import { View } from '@vkontakte/vkui';
+import { Root } from '@vkontakte/vkui';
 import '@vkontakte/vkui/dist/vkui.css';
 
-import Home from './panels/Home';
-import Persik from './panels/Persik';
+import MainForm from './components/blocks/MainFork';
+import SelectCity from './components/blocks/SelectCity';
 
 class App extends React.Component {
 	constructor(props) {
 		super(props);
 
 		this.state = {
-			activePanel: 'home',
+			activeView: 'mainfork',
 			fetchedUser: null,
 		};
 	}
@@ -27,18 +27,18 @@ class App extends React.Component {
 			}
 		});
 		connect.send('VKWebAppGetUserInfo', {});
-	}
-
-	go = (e) => {
-		this.setState({ activePanel: e.currentTarget.dataset.to })
-	};
+  }
+  
+  goToView = (activeView) => {
+    this.setState({ activeView });
+  }
 
 	render() {
 		return (
-			<View activePanel={this.state.activePanel}>
-				<Home id="home" fetchedUser={this.state.fetchedUser} go={this.go} />
-				<Persik id="persik" go={this.go} />
-			</View>
+			<Root activeView={this.state.activeView}>
+        <MainForm id='mainfork' goToView={this.goToView} />
+        <SelectCity id='selectcity' goToView={this.goToView} />
+      </Root>
 		);
 	}
 }

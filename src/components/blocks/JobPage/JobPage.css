@@ -1,0 +1,81 @@
+.jobpage {
+    padding: 5px 10px;
+}
+
+.jobpage p, .jobpage h3 {
+    margin: 0;
+    margin-bottom: 10px;
+}
+
+.jobpage p {
+    font-size: 14px;
+}
+
+.jobpage__name {
+    font-size: 18px;
+    color: #0B9ED0;
+    font-weight: 600;
+}
+
+.jobpage__salary {
+    font-size: 15px;
+    color: #444;
+    font-weight: 600;
+}
+
+.jobpage .jobpage__organization {
+    color: #85144b;
+    font-size: 16px;
+    font-weight: 600;
+    margin-bottom: 5px;
+}
+
+.jobpage .jobpage__created {
+    margin-bottom: 0;
+    color: #777;
+    font-size: 12px;
+} 
+
+.jobpage__address {
+    font-size: 14px;
+    color: #444;
+}
+
+.jobpage .jobpage__expirience {
+    margin-bottom: 0;
+}
+
+.jobpage__expirience, .jobpage__employmentType {
+    color: #444;
+    font-size: 14px;
+}
+
+.jobpage__employmentType-value, .jobpage__expirience-value {
+    font-weight: 600;
+}
+
+.jobpage h4 {
+    color: #444;
+    font-size: 15px;
+}
+
+.jobpage .jobpage__description {
+    font-size: 14px;
+    margin-top: 20px;
+}
+
+.jobpage__answer {
+    text-align: right;
+    margin-bottom: 10px;
+}
+
+.jobpage__answer button {
+    padding: 8px 12px;
+    font-size: 14px;
+    border: none;
+    background: #0E81D6;
+    color: #fff;
+    font-weight: 500;
+    border-radius: 2px;
+    outline: none;
+}

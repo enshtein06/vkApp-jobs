@@ -1,0 +1,56 @@
+.jobcell {
+    background: #fff;
+    border-bottom: 1px solid #ddd;
+    box-sizing: border-box;
+    padding: 5px 10px;
+}
+
+.jobcell p {
+    margin: 0;
+}
+
+.jobcell__head p {
+    display: flex;
+    justify-content: space-between;
+    font-size: 14px;
+    margin-bottom: 10px;
+}
+
+.jobcell__head--name {
+    color: #0B9ED0;
+    font-weight: 600;
+}
+
+.jobcell__head--salary {
+    color: #444;
+    font-weight: 600;
+}
+
+.jobcell__subhead--organization {
+    font-size: 12px;
+    color: #777;
+}
+
+.jobcell__subhead {
+    margin-bottom: 10px;
+}
+
+.jobcell__subhead--second {
+    display: flex;
+    justify-content: space-between;
+}
+
+.jobcell__subhead--second-city {
+    font-size: 12px;
+    color: #777;
+}
+
+.jobcell__subhead--second-created {
+    font-size: 12px;
+    color: #444;
+}
+
+.jobcell__body {
+    font-size: 13px;
+    line-height: 1.2;
+}
