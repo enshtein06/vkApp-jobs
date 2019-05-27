@@ -1,0 +1,17 @@
+.extendedfilters__search {
+    text-align: right;
+    margin-bottom: 10px;
+    padding-right: 16px;
+}
+
+.extendedfilters__search button {
+    padding: 8px 36px;
+    font-size: 14px;
+    cursor: pointer;
+    border: none;
+    background: #0E81D6;
+    color: #fff;
+    font-weight: 500;
+    border-radius: 2px;
+    outline: none;
+}

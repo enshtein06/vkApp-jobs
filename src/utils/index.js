@@ -7,8 +7,15 @@ export const reduceStringLength = (str = '', numberToReduce = 0) => {
 export const formatDate = (date = new Date()) => {
     const day = date.getDate();
     const month = monthNamesShort[date.getMonth()];
-    const hours = date.getHours();
-    const minutes = date.getMinutes();
+    let hours = date.getHours();
+    let minutes = date.getMinutes();
 
-    return `${hours}:${minutes} ${day} ${month}`;
+    if(`${hours}`.length === 1) {
+        hours = `0${hours}`;
+    }
+    if(`${minutes}`.length === 1) {
+        minutes = `0${minutes}`;
+    }
+
+    return `${day} ${month}, ${hours}:${minutes}`;
 }

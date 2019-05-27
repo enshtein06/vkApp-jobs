@@ -71,6 +71,7 @@
 
 .jobpage__answer button {
     padding: 8px 12px;
+    cursor: pointer;
     font-size: 14px;
     border: none;
     background: #0E81D6;

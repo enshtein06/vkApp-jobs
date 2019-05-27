@@ -51,6 +51,11 @@ class MainFork extends Component {
     this.goForward('jobpage');
   }
 
+  handleFormSubmit = (fields) => {
+    this.goBack();
+    console.log(fields);
+  }
+
   render() {
     const { id } = this.props;
     const { activePanel } = this.state;
@@ -88,7 +93,11 @@ class MainFork extends Component {
           goToPanel={this.goForward} 
           handleCellClick={this.handleCellClick} 
         />
-        <ExtendedFilters id='extendedfilters' goBack={this.goBack} />
+        <ExtendedFilters 
+          id='extendedfilters' 
+          goBack={this.goBack} 
+          handleFormSubmit={this.handleFormSubmit}
+        />
         <JobPage 
           id='jobpage' 
           goBack={this.goBack} 
