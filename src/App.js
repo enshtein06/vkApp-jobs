@@ -7,14 +7,10 @@ import MainForm from './components/blocks/MainFork';
 import SelectCity from './components/blocks/SelectCity';
 
 class App extends React.Component {
-	constructor(props) {
-		super(props);
-
-		this.state = {
-			activeView: 'mainfork',
-			fetchedUser: null,
-		};
-	}
+	state = {
+		activeView: 'mainfork',
+		fetchedUser: null,
+	};
 
 	componentDidMount() {
 		connect.subscribe((e) => {

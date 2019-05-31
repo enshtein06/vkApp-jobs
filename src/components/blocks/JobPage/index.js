@@ -15,8 +15,14 @@ class JobPage extends PureComponent {
         entity: PropTypes.shape({
             name: PropTypes.string,
             salary: PropTypes.string,
-            organization: PropTypes.string,
-            city: PropTypes.string,
+            organization: PropTypes.shape({
+                id: PropTypes.number, 
+                name: PropTypes.string
+            }),
+            city: PropTypes.shape({
+                id: PropTypes.number, 
+                name: PropTypes.string
+            }),
             createdAt: PropTypes.object,
             description: PropTypes.string,
             contacts: PropTypes.arrayOf(PropTypes.shape({
@@ -24,12 +30,22 @@ class JobPage extends PureComponent {
                 numbers: PropTypes.string
             })),
             address: PropTypes.string,
-            employmentType: PropTypes.string,
+            employmentType: PropTypes.shape({
+                id: PropTypes.number, 
+                name: PropTypes.string
+            }),
             requirments: PropTypes.arrayOf(PropTypes.string),
             wishes: PropTypes.arrayOf(PropTypes.string),
             activities: PropTypes.arrayOf(PropTypes.string),
             bonuses: PropTypes.arrayOf(PropTypes.string),
-            expirience: PropTypes.string
+            expirience: PropTypes.shape({
+                id: PropTypes.number, 
+                name: PropTypes.string
+            }),
+            shedule: PropTypes.shape({
+                id: PropTypes.number, 
+                name: PropTypes.string
+            })
         }).isRequired
     }
 
