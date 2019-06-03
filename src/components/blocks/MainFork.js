@@ -7,16 +7,19 @@ import './MainFork.css';
 import FindJob from './FindJob';
 import ExtendedFilters from './ExtendedFilters';
 import JobPage from './JobPage';
+import CreateVacation from './CreateVacation';
 
 class MainFork extends Component {
   static propTypes = {
-    id: PropTypes.string
+    id: PropTypes.string,
+    selectCity: PropTypes.object.isRequired
   }
 
   state = {
     activePanel: 'mainfork',
     history: ['mainfork'],
-    selected: null
+    selected: null,
+    createJobValues: {}
   }
 
   goBack = () => {
@@ -51,9 +54,15 @@ class MainFork extends Component {
     this.goForward('jobpage');
   }
 
-  handleFormSubmit = (fields) => {
+  goToGiveJob = () => this.goForward('createvacation');
+
+  handleExtendedFiltersSubmit = (fields) => {
     this.goBack();
     console.log(fields);
+  }
+
+  handleCreateJobValuesChange = values => {
+    this.setState({createJobValues: values});
   }
 
   render() {
@@ -82,7 +91,7 @@ class MainFork extends Component {
                   top='Откуда вы?'
                   placeholder='Выберите город'
                   onClick={this.goToCityView}
-                >Санкт-Петербург</SelectMimicry>
+                >{this.props.selectedCity.title}</SelectMimicry>
               </FormLayout>
             </div>
           </div>
@@ -96,13 +105,19 @@ class MainFork extends Component {
         <ExtendedFilters 
           id='extendedfilters' 
           goBack={this.goBack} 
-          handleFormSubmit={this.handleFormSubmit}
+          handleFormSubmit={this.handleExtendedFiltersSubmit}
         />
         <JobPage 
           id='jobpage' 
           goBack={this.goBack} 
           goToPanel={this.goForward} 
           entity={this.state.selected}
+        />
+        <CreateVacation 
+          id='createvacation'
+          goBack={this.goBack}
+          handleValuesUpdate={this.handleCreateJobValuesChange}
+          initialValues={this.state.createJobValues}
         />
       </View>
     )

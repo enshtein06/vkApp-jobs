@@ -1,0 +1,15 @@
+.cityCell {
+    background: #fff;
+    box-sizing: border-box;
+    border-bottom: 1px solid #ccc;
+    padding: 14px;
+    position: relative;
+}
+
+.cityCell__arrow {
+    position: absolute;
+    top: 50%;
+    right: 14px;
+    transform: translateY(-50%);
+    color: #0B9ED0;
+}

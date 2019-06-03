@@ -6,7 +6,8 @@ import {
     FormLayout,
     FormLayoutGroup,
     Input,
-    Select
+    Select,
+    Button
  } from '@vkontakte/vkui';
 import HeadButton from '../../commons/buttons/HeadButton';
 
@@ -109,6 +110,10 @@ class ExtendedFilters extends PureComponent {
             <Panel id={id}>
                 <PanelHeader left={this.renderButton}>Расширенный поиск</PanelHeader>
                 <FormLayout>
+                    <Button 
+                        onClick={this.handleFormSubmit} 
+                        size='xl'
+                    >Начать поиск</Button>
                     <Select {...category} onChange={this.handleChange}>
                         {category.options.map(cat => {
                             return (

@@ -1,0 +1,31 @@
+.createVacation__addButton {
+    padding: 8px 12px;
+    margin-left: 16px;
+    border: 1px solid #ccc;
+    color: #444;
+    font-size: 18px;
+    font-weight: 600;
+    background: #fff;
+    border-radius: 5px;
+    line-height: 1;
+}
+
+.createVacation .FormLayout__row-top {
+    color: #444;
+    font-size: 16px;
+}
+
+.createVacation .FormLayout--android .FormLayout__row-bottom {
+    padding-top: 3px;
+}
+
+.createVacation__contacts .Input__el {
+    margin-bottom: 15px;
+}
+
+.createVacation__contacts--head {
+    font-weight: 400;
+    font-size: 14px;
+    color: #444;
+    margin: 8px 16px;
+}

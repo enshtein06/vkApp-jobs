@@ -1,3 +1,7 @@
 import { combineReducers } from 'redux';
 
-export default combineReducers({})
+import lookupsReducers, {moduleName as lookupsModule} from '../ducks/lookups';
+
+export default combineReducers({
+    [lookupsModule]: lookupsReducers
+})
