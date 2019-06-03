@@ -1,15 +1,15 @@
 {
-  "main.css": "/vkApp-jobs/static/css/main.c3bfe118.chunk.css",
-  "main.js": "/vkApp-jobs/static/js/main.2705db48.chunk.js",
-  "main.js.map": "/vkApp-jobs/static/js/main.2705db48.chunk.js.map",
+  "main.css": "/vkApp-jobs/static/css/main.8a88580f.chunk.css",
+  "main.js": "/vkApp-jobs/static/js/main.4478d0b2.chunk.js",
+  "main.js.map": "/vkApp-jobs/static/js/main.4478d0b2.chunk.js.map",
   "runtime~main.js": "/vkApp-jobs/static/js/runtime~main.eb698806.js",
   "runtime~main.js.map": "/vkApp-jobs/static/js/runtime~main.eb698806.js.map",
-  "static/css/2.be9c4f48.chunk.css": "/vkApp-jobs/static/css/2.be9c4f48.chunk.css",
-  "static/js/2.33f89bfb.chunk.js": "/vkApp-jobs/static/js/2.33f89bfb.chunk.js",
-  "static/js/2.33f89bfb.chunk.js.map": "/vkApp-jobs/static/js/2.33f89bfb.chunk.js.map",
+  "static/css/2.51fcb348.chunk.css": "/vkApp-jobs/static/css/2.51fcb348.chunk.css",
+  "static/js/2.6fe3ec98.chunk.js": "/vkApp-jobs/static/js/2.6fe3ec98.chunk.js",
+  "static/js/2.6fe3ec98.chunk.js.map": "/vkApp-jobs/static/js/2.6fe3ec98.chunk.js.map",
   "index.html": "/vkApp-jobs/index.html",
-  "precache-manifest.b29f04a967cca875e6ddf3626b5bb2ce.js": "/vkApp-jobs/precache-manifest.b29f04a967cca875e6ddf3626b5bb2ce.js",
+  "precache-manifest.1e1322682d57cb78f0ffbccfd2f33b44.js": "/vkApp-jobs/precache-manifest.1e1322682d57cb78f0ffbccfd2f33b44.js",
   "service-worker.js": "/vkApp-jobs/service-worker.js",
-  "static/css/2.be9c4f48.chunk.css.map": "/vkApp-jobs/static/css/2.be9c4f48.chunk.css.map",
-  "static/css/main.c3bfe118.chunk.css.map": "/vkApp-jobs/static/css/main.c3bfe118.chunk.css.map"
+  "static/css/2.51fcb348.chunk.css.map": "/vkApp-jobs/static/css/2.51fcb348.chunk.css.map",
+  "static/css/main.8a88580f.chunk.css.map": "/vkApp-jobs/static/css/main.8a88580f.chunk.css.map"
 }
