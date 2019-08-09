@@ -4,17 +4,32 @@ import {
     FETCH_VACATIONS_ERROR
 } from '../actions';
 
-export default (state = {}, action) => {
-    const { type, payload } = action;
+const stateStore = {
+    loading: false,
+    error: null,
+    entities: []
+}
+
+export default (state = stateStore, action) => {
+    const { type, payload, error } = action;
 
     switch(type) {
+        case FETCH_VACATIONS_START:
+            return {
+                ...state,
+                loading: true
+            }
         case FETCH_VACATIONS_SUCCESS: 
             return {
-                ...state
+                ...state,
+                loading: false,
+                entities: state.entities.concat(payload.entities)
             };
         case FETCH_VACATIONS_ERROR:
             return {
-                ...state
+                ...state,
+                loading: false,
+                error
             }
         default:
             return state;

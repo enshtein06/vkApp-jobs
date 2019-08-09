@@ -19,3 +19,7 @@ export const formatDate = (date = new Date()) => {
 
     return `${day} ${month}, ${hours}:${minutes}`;
 }
+
+export const serializeParamsToString = (params = {}) => {
+    return ``;
+}

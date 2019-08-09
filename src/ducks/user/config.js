@@ -1,5 +1,5 @@
 import { appName } from '../../config';
 
-export const moduleName = 'vacations';
+export const moduleName = 'user';
 export const prefix = `${appName}/${moduleName}`;
-export const entityType = 'vacations';
+export const entityType = 'user';

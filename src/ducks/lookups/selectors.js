@@ -1,5 +1,3 @@
-import { createSelector } from 'reselect';
-
 const emptyState = {
     isLoading: false,
     response: {
@@ -9,6 +7,13 @@ const emptyState = {
 }
 
 const stateSelector = state => state.lookups;
+
+export const lookupsValuesSelector = (state) => {
+    return stateSelector(state).values;
+}
+export const lookupsLoadingSelector = (state) => {
+    return stateSelector(state).isLoading;
+}
 
 const citiesStateSelector = (state) => {
     const lookupsSel = stateSelector(state);

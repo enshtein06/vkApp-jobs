@@ -57,7 +57,18 @@ export const fields = {
             top: 'Опыт работы',
             placeholder: 'Выберите опыт работы'
         },
-        lookupKey: '',
+        lookupKey: 'expirience',
+        error: null,
+        validate: []
+    },
+    description: {
+        id: 'description',
+        props: {
+            name: 'description',
+            type: 'text',
+            top: 'Краткое описание',
+            placeholder: 'Это первое, что увидит соискатель при поиске вакансии'
+        },
         error: null,
         validate: []
     },
@@ -69,7 +80,19 @@ export const fields = {
             top: 'Тип занятости',
             placeholder: 'Выберите тип занятости'
         },
-        lookupKey: '',
+        lookupKey: 'employmentType',
+        error: null,
+        validate: []
+    },
+    schedule: {
+        id: 'schedule',
+        props: {
+            name: 'schedule',
+            type: 'select',
+            top: 'График',
+            placeholder: 'Выберите график работы'
+        },
+        lookupKey: 'schedule',
         error: null,
         validate: []
     },
@@ -120,17 +143,6 @@ export const fields = {
         error: null,
         validate: [],
         isMulti: true
-    },
-    description: {
-        id: 'description',
-        props: {
-            name: 'description',
-            type: 'text',
-            top: 'Краткое описание',
-            placeholder: 'Это первое, что увидит соискатель при поиске вакансии'
-        },
-        error: null,
-        validate: []
     },
     contact_name: {
         id: 'contact_name',

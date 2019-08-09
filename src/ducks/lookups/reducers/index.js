@@ -1,6 +1,10 @@
 import { SUCCESS_LOOKUPS_VKAPI, START_LOOKUPS_VKAPI } from '../actions';
+import { values } from './values';
 
-const startState = {};
+const startState = {
+    isLoading: false,
+    values
+};
 
 export default (state = startState, action) => {
     const { type, payload } = action;

@@ -24,7 +24,6 @@ class App extends React.Component {
 			switch (e.detail.type) {
 				case 'VKWebAppGetUserInfoResult':
 				// remove!! later
-					console.log(e.detail.data);
 					this.setState({ 
 						fetchedUser: e.detail.data, 
 						selectedCity: e.detail.data.city 
@@ -70,6 +69,7 @@ class App extends React.Component {
 					id='mainfork' 
 					goToView={this.goToView} 
 					selectedCity={this.state.selectedCity} 
+					user={this.state.fetchedUser}
 				/>
 				<SelectCity 
 					id='selectcity' 
@@ -83,7 +83,6 @@ class App extends React.Component {
 }
 
 export default reduxConnect(state => {
-	console.log(state);
 	return {}
 }, {
 	putLookupsVkApiToStore,

@@ -1,8 +1,8 @@
 import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
-import { 
-  Panel, 
-  View, 
+import {
+  Panel,
+  View,
   PanelHeader,
   Search
  } from '@vkontakte/vkui';
@@ -65,8 +65,8 @@ class SelectCity extends PureComponent {
     const el = this.props.cities[index];
     const { title, id } = el;
     return (
-        <div 
-            key={key} 
+        <div
+            key={key}
             style={style}
             className='cityCell'
             name={index}
@@ -83,8 +83,13 @@ class SelectCity extends PureComponent {
     return (
       <View id={id} activePanel={this.state.activePanel}>
         <Panel id='main'>
-          <PanelHeader left={this.renderHeaderButton}>Выберите город</PanelHeader>
-          <Search value={this.state.searchValue} onChange={this.handleSearchChange} />
+          <PanelHeader left={this.renderHeaderButton}>
+            Выберите город
+          </PanelHeader>
+          <Search 
+            value={this.state.searchValue} 
+            onChange={this.handleSearchChange} 
+          />
           <AutoSizer>
             {({height, width}) => {
               return (

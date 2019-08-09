@@ -19,6 +19,6 @@ const fetchApi = (params = {}) => async () => {
     return {...body, status: response.status};
   };
   
-  export default fetchApi;
+export default fetchApi;
   
   

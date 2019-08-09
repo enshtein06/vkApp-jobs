@@ -1,5 +1,9 @@
 import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
+
+import { connect } from 'react-redux';
+import { fetchVacations } from '../../../ducks/vacations';
+
 import { 
     Panel, 
     PanelHeader, 
@@ -109,6 +113,10 @@ class FindJob extends PureComponent {
         isRequestStarted: false,
         isLoaded: false,
         listArray: [...fakeList]
+    }
+
+    componentDidMount = () => {
+        this.props.fetchVacations();
     }
 
     handleSearchChange = (search) => this.setState({ search });
@@ -272,4 +280,10 @@ class FindJob extends PureComponent {
     }
 }
 
-export default FindJob;
+export default connect((state) => {
+    return {
+        vacations: []
+    }
+}, {
+    fetchVacations
+})(FindJob);

@@ -1,6 +1,15 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import { View, Panel, PanelHeader, Button, SelectMimicry, FormLayout } from '@vkontakte/vkui';
+import { connect } from 'react-redux';
+import { createVacation } from '../../ducks/vacations';
+import { 
+  View, 
+  Panel, 
+  PanelHeader, 
+  Button, 
+  SelectMimicry, 
+  FormLayout
+} from '@vkontakte/vkui';
 import vkuiConnect from '@vkontakte/vkui-connect';
 import './MainFork.css';
 
@@ -8,6 +17,8 @@ import FindJob from './FindJob';
 import ExtendedFilters from './ExtendedFilters';
 import JobPage from './JobPage';
 import CreateVacation from './CreateVacation';
+
+import MainForkPopout from './MainForkPopout';
 
 class MainFork extends Component {
   static propTypes = {
@@ -58,19 +69,21 @@ class MainFork extends Component {
 
   handleExtendedFiltersSubmit = (fields) => {
     this.goBack();
-    console.log(fields);
   }
 
   handleCreateJobValuesChange = values => {
-    this.setState({createJobValues: values});
+    this.goBack()
+    //this.props.createVacation(values);
+    //this.setState({createJobValues: values});
   }
 
   render() {
     const { id } = this.props;
     const { activePanel } = this.state;
 
+    console.log(this.props)
     return (
-      <View id={id} activePanel={activePanel}>
+      <View id={id} activePanel={activePanel} popout={null}>
         <Panel id='mainfork'>
           <PanelHeader>Работа</PanelHeader>
           <div className='mainfork'>
@@ -118,10 +131,15 @@ class MainFork extends Component {
           goBack={this.goBack}
           handleValuesUpdate={this.handleCreateJobValuesChange}
           initialValues={this.state.createJobValues}
+          user={this.props.user}
         />
       </View>
     )
   }
 }
 
-export default MainFork;
+export default connect(state => {
+  return {}
+}, {
+  createVacation
+})(MainFork);
