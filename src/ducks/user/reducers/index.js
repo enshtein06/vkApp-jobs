@@ -1,9 +1,9 @@
-import { combineReducers } from 'redux';
+import { combineReducers } from "redux";
 
-import vkUser from './vkUser';
-import initialVkUser from './initialVkUser';
+import vkUser from "./vkUser";
+import initialVkUser from "./initialVkUser";
 
 export default combineReducers({
-    vkUser,
-    initialVkUser
+  vkUser,
+  initialVkUser
 });

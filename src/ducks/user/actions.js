@@ -1,6 +1,6 @@
-import { prefix } from './config';
+import { prefix } from "./config";
 
-// DATA that will return 
+// DATA that will return
 // is main user data
 // if he can create new vacation
 // and if he has already created smth

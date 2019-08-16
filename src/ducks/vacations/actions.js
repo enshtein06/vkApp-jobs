@@ -1,4 +1,4 @@
-import { prefix } from './config';
+import { prefix } from "./config";
 
 export const FETCH_VACATIONS_REQUEST = `${prefix}/FETCH_VACATIONS_REQUEST`;
 export const FETCH_VACATIONS_START = `${prefix}/FETCH_VACATIONS_START`;
