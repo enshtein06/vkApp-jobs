@@ -7,7 +7,8 @@ import {
 const mainState = {
     isLoading: false,
     error: null,
-    entity: null
+    entity: null,
+    isLoaded: false
 };
 
 export default (state = mainState, action) => {
@@ -18,21 +19,24 @@ export default (state = mainState, action) => {
                 ...state,
                 isLoading: true,
                 error: null,
-                entity: null
+                entity: null,
+                isLoaded: false
             }
         case FETCH_VK_USER_SUCCESS:
             return {
                 ...state,
                 isLoading: false,
                 error: null,
-                entity: payload.entity
+                entity: payload.entity,
+                isLoaded: true
             }
         case FETCH_VK_USER_ERROR:
             return {
                 ...state,
                 isLoading: false,
                 error: error,
-                entity: null
+                entity: null,
+                isLoaded: true
             }
         default:
             return state;

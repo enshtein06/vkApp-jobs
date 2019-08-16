@@ -12,7 +12,7 @@ export const fetchEntitiesList = (params = {}, typeEntity = '') => {
 
 export const fetchEntity = (entityId = '', typeEntity = '') => {
     return {
-        action: `/api/${typeEntity}/:${entityId}`,
+        action: `/api/${typeEntity}/${entityId}`,
         options: {
             method: 'GET'
         }

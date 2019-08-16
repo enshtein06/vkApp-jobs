@@ -5,6 +5,8 @@ import { Root } from '@vkontakte/vkui';
 import '@vkontakte/vkui/dist/vkui.css';
 import { token } from './config';
 import { requestLookupsVkApi, putLookupsVkApiToStore } from './ducks/lookups';
+import { initializeVkUserData } from './ducks/user';
+import { fetchVacationsForVkUser } from './ducks/vacations';
 
 import MainForm from './components/blocks/MainFork';
 import SelectCity from './components/blocks/SelectCity';
@@ -38,7 +40,6 @@ class App extends React.Component {
 					break
 				default:
 					console.log(e);
-					console.log(e.detail.type);
 			}
 		});
 		connect.send('VKWebAppGetUserInfo', {});
@@ -52,6 +53,16 @@ class App extends React.Component {
 				'access_token': token
 			}
 		);
+  }
+
+  componentDidUpdate = (prevProps, prevState) => {
+	  if(
+		  !prevState.fetchedUser && 
+		  this.state.fetchedUser !== prevState.fetchedUser
+		) {
+			this.props.initializeVkUserData(this.state.fetchedUser.id);
+			this.props.fetchVacationsForVkUser(this.state.fetchedUser.id);
+		}
   }
 
   handleCitySelected = (selectedCity) => {
@@ -86,5 +97,7 @@ export default reduxConnect(state => {
 	return {}
 }, {
 	putLookupsVkApiToStore,
-	requestLookupsVkApi
+	requestLookupsVkApi,
+	initializeVkUserData,
+	fetchVacationsForVkUser
 })(App);

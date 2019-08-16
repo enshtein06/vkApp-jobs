@@ -18,8 +18,6 @@ import ExtendedFilters from './ExtendedFilters';
 import JobPage from './JobPage';
 import CreateVacation from './CreateVacation';
 
-import MainForkPopout from './MainForkPopout';
-
 class MainFork extends Component {
   static propTypes = {
     id: PropTypes.string,
@@ -30,7 +28,8 @@ class MainFork extends Component {
     activePanel: 'mainfork',
     history: ['mainfork'],
     selected: null,
-    createJobValues: {}
+    createJobValues: {},
+    popout: null
   }
 
   goBack = () => {
@@ -72,18 +71,22 @@ class MainFork extends Component {
   }
 
   handleCreateJobValuesChange = values => {
-    this.goBack()
     //this.props.createVacation(values);
     //this.setState({createJobValues: values});
   }
+
+  handlePopuotChange = (popout) => this.setState({ popout });
 
   render() {
     const { id } = this.props;
     const { activePanel } = this.state;
 
-    console.log(this.props)
     return (
-      <View id={id} activePanel={activePanel} popout={null}>
+      <View 
+        id={id} 
+        activePanel={activePanel} 
+        popout={this.state.popout}
+      >
         <Panel id='mainfork'>
           <PanelHeader>Работа</PanelHeader>
           <div className='mainfork'>
@@ -109,11 +112,12 @@ class MainFork extends Component {
             </div>
           </div>
         </Panel>
-        <FindJob 
-          id='findjob' 
-          goBack={this.goBack} 
-          goToPanel={this.goForward} 
-          handleCellClick={this.handleCellClick} 
+        <FindJob
+          id='findjob'
+          goBack={this.goBack}
+          goToPanel={this.goForward}
+          handleCellClick={this.handleCellClick}
+          selectedCity={this.props.selectedCity}
         />
         <ExtendedFilters 
           id='extendedfilters' 
@@ -132,6 +136,8 @@ class MainFork extends Component {
           handleValuesUpdate={this.handleCreateJobValuesChange}
           initialValues={this.state.createJobValues}
           user={this.props.user}
+          handlePopuotChange={this.handlePopuotChange}
+          selectedCity={this.props.selectedCity}
         />
       </View>
     )

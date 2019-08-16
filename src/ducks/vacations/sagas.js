@@ -1,4 +1,4 @@
-import { all, call, takeEvery, put } from 'redux-saga/effects';
+import { all, call, takeEvery, put, select } from 'redux-saga/effects';
 import {
     // fetch list of vacations
     FETCH_VACATIONS_REQUEST,
@@ -24,7 +24,12 @@ import {
     DELETE_VACATION_REQUEST,
     DELETE_VACATION_START,
     DELETE_VACATION_SUCCESS,
-    DELETE_VACATION_ERROR
+    DELETE_VACATION_ERROR,
+    // fetch list for vkUserId
+    FETCH_VACATIONS_FOR_VK_USER_REQUEST,
+    FETCH_VACATIONS_FOR_VK_USER_START,
+    FETCH_VACATIONS_FOR_VK_USER_SUCCESS,
+    FETCH_VACATIONS_FOR_VK_USER_ERROR,
 } from './actions';
 import {
     fetchEntitiesList,
@@ -35,6 +40,9 @@ import {
 } from '../../api/commonApi';
 import { moduleName, entityType } from './config';
 import fetchApi from '../../helpers/fetchApi';
+
+import { vkUserIdSelector } from '../user';
+import { lookupsValuesSelector } from '../lookups';
 
 export function* fetchVacationsSaga(
     action = {
@@ -115,7 +123,61 @@ export function* createVacationSaga(
     yield put({ type: CREATE_VACATION_START });
 
     try {
-        const requestParams = createEntity(values, entityType);
+        const normalizedValues = {
+            ...values
+        };
+        if(
+            values.contact_name && 
+            Array.isArray(values.contact_name) && 
+            values.contact_name.length
+        ) {
+            const contacts = [];
+            values.contact_name.map((name, index) => {
+                contacts.push({
+                    name: name,
+                    numbers: values.contact_numbers && 
+                        Array.isArray(values.contact_numbers) &&
+                        values.contact_numbers[index] || 
+                        null,
+                    email: values.contact_email && 
+                        Array.isArray(values.contact_email) &&
+                        values.contact_email[index] || null
+                });
+            });
+            delete normalizedValues.contact_name;
+            delete normalizedValues.contact_numbers;
+            delete normalizedValues.contact_email;
+            normalizedValues.contacts = contacts;
+        }
+        const lookups = yield select(lookupsValuesSelector);
+        if(
+            values.expirience &&
+            lookups.expirience && 
+            Array.isArray(lookups.expirience)
+        ) {
+            normalizedValues.expirience = lookups
+                .expirience
+                .find(exp => exp.id === +values.expirience);
+        }
+        if(
+            values.employmentType &&
+            lookups.employmentType && 
+            Array.isArray(lookups.employmentType)
+        ) {
+            normalizedValues.employmentType = lookups
+                .employmentType
+                .find(exp => exp.id === +values.employmentType);
+        }
+        if(
+            values.schedule &&
+            lookups.schedule && 
+            Array.isArray(lookups.schedule)
+        ) {
+            normalizedValues.schedule = lookups
+                .schedule
+                .find(exp => exp.id === +values.schedule);
+        }
+        const requestParams = createEntity(normalizedValues, entityType);
         const fetchParams = yield fetchApi(requestParams);
         const data = yield call(fetchParams);
 
@@ -124,6 +186,12 @@ export function* createVacationSaga(
             payload: {
                 entity: data.payload
             }
+        });
+
+        const vkUserId = yield select(vkUserIdSelector);
+        yield put({
+            type: FETCH_VACATIONS_FOR_VK_USER_REQUEST,
+            payload: { vkUserId }
         });
     } catch (error) {
         yield put({
@@ -201,12 +269,42 @@ export function* deleteEntitySaga(
     }
 }
 
+export function* fetchEntitiesListForVkUserSaga (action) {
+    const { vkUserId } = action.payload;
+    yield put({ type: FETCH_VACATIONS_FOR_VK_USER_START });
+
+    try {
+        const requestParams = fetchEntity(
+            vkUserId, 
+            'vacations/vkUser'
+        );
+        const fetchParams = yield fetchApi(requestParams);
+        const data = yield call(fetchParams);
+
+        yield put({
+            type: FETCH_VACATIONS_FOR_VK_USER_SUCCESS,
+            payload: {
+                entities: data.payload
+            }
+        });
+    } catch (error) {
+        yield put({
+            type: FETCH_VACATIONS_FOR_VK_USER_ERROR,
+            error
+        });
+    }
+}
+
 export function* rootSaga() {
     yield all([
         takeEvery(FETCH_VACATIONS_REQUEST, fetchVacationsSaga),
         takeEvery(FETCH_VACATION_REQUEST, fetchVacationSaga),
         takeEvery(CREATE_VACATION_REQUEST, createVacationSaga),
         takeEvery(UPDATE_VACATION_REQUEST, updateEntitySaga),
-        takeEvery(DELETE_VACATION_REQUEST, deleteEntitySaga)
+        takeEvery(DELETE_VACATION_REQUEST, deleteEntitySaga),
+        takeEvery(
+            FETCH_VACATIONS_FOR_VK_USER_REQUEST, 
+            fetchEntitiesListForVkUserSaga
+        )
     ])
 }

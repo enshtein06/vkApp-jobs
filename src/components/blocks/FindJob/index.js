@@ -2,7 +2,12 @@ import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
 
 import { connect } from 'react-redux';
-import { fetchVacations } from '../../../ducks/vacations';
+import {
+    fetchVacations,
+    listEntitiesSelector,
+    listLoadingSelector,
+    listErrorSelector
+} from '../../../ducks/vacations';
 
 import { 
     Panel, 
@@ -21,47 +26,6 @@ import { reduceStringLength, formatDate } from '../../../utils';
 import './FindJob.css';
 import { List, AutoSizer } from 'react-virtualized';
 
-
-const fakeList = [];
-for(let i = 0; i < 20; i++) {
-    fakeList.push({
-        name: `Официант`,
-        id: `id: ${i}`,
-        salary: `${i + 1}0 000 rub.`,
-        organization: 'Ресторан: The doors bar',
-        city: 'Saint P.',
-        createdAt: new Date(),
-        description: 'Controls the alignment scrolled-to-rows. The default ("auto") scrolls the least amount possible to ensure that the specified row is fully visible. Use "start" to always align rows to the top of the list and "end" to align them bottom. Use "center" to align them in the middle of container.',
-        contacts: [
-            {
-                name: 'Alex',
-                numbers: '89992145123'
-            }, {
-                name: 'Elena',
-                numbers: '89525426672'
-            }
-        ],
-        address: 'address asd',
-        employmentType: 'full time',
-        requirments: [
-            'Также вы можете использовать предопределенные константы, определяющие платформу:', 
-            'Как вариант, на корневой элемент можно навесить модификаторы.'
-        ],
-        activities: [
-            'Также вы можете использовать предопределенные константы, определяющие платформу:', 
-            'Как вариант, на корневой элемент можно навесить модификаторы.'
-        ],
-        bonuses: [
-            'Также вы можете использовать предопределенные константы, определяющие платформу:', 
-            'Как вариант, на корневой элемент можно навесить модификаторы.'
-        ],
-        wishes: [
-            'Также вы можете использовать предопределенные константы, определяющие платформу:', 
-            'Как вариант, на корневой элемент можно навесить модификаторы.'
-        ],
-        expirience: 'от 1 до 3 года'
-    });
-}
 
 class FindJob extends PureComponent {
     static propTypes = {
@@ -104,19 +68,19 @@ class FindJob extends PureComponent {
                 name: PropTypes.string
             })
         })),
+        selectedCity: PropTypes.object,
         handleCellClick: PropTypes.func
     }
 
     state = {
         search: '',
-        contextOpened: false,
-        isRequestStarted: false,
-        isLoaded: false,
-        listArray: [...fakeList]
+        skip: 0
     }
 
     componentDidMount = () => {
-        this.props.fetchVacations();
+        this.props.fetchVacations({
+            skip: this.state.skip
+        });
     }
 
     handleSearchChange = (search) => this.setState({ search });
@@ -140,57 +104,21 @@ class FindJob extends PureComponent {
 
     handleListScroll = (data) => {
         const { clientHeight, scrollHeight, scrollTop } = data;
-        const length = this.state.listArray.length;
+        const length = this.props.vacations.length;
         if(!
-            this.state.isRequestStarted && 
+            this.props.isLoading && 
             (scrollHeight < (
                 clientHeight + scrollTop + (scrollHeight * 10 / 100)
             ))
         ) {
-            this.setState({isRequestStarted: true});
-            const listArray = [...this.state.listArray];
-            for(let i = length; i < length + 10; i++) {
-                listArray.push({
-                    name: `Официант`,
-                    id: `id: ${i}`,
-                    salary: `${i + 1}0 000 rub.`,
-                    organization: 'Ресторан: The doors bar',
-                    city: 'Saint P.',
-                    createdAt: new Date(),
-                    description: 'Controls the alignment scrolled-to-rows. The default ("auto") scrolls the least amount possible to ensure that the specified row is fully visible. Use "start" to always align rows to the top of the list and "end" to align them bottom. Use "center" to align them in the middle of container.',
-                    contacts: [
-                        {
-                            name: 'Alex',
-                            numbers: '89992145123'
-                        }, {
-                            name: 'Elena',
-                            numbers: '89525426672'
-                        }
-                    ],
-                    address: 'address asd',
-                    employmentType: 'full time',
-                    requirments: [
-                        'Также вы можете использовать предопределенные константы, определяющие платформу:', 
-                        'Как вариант, на корневой элемент можно навесить модификаторы.'
-                    ],
-                    activities: [
-                        'Также вы можете использовать предопределенные константы, определяющие платформу:', 
-                        'Как вариант, на корневой элемент можно навесить модификаторы.'
-                    ],
-                    bonuses: [
-                        'Также вы можете использовать предопределенные константы, определяющие платформу:', 
-                        'Как вариант, на корневой элемент можно навесить модификаторы.'
-                    ],
-                    wishes: [
-                        'Также вы можете использовать предопределенные константы, определяющие платформу:', 
-                        'Как вариант, на корневой элемент можно навесить модификаторы.'
-                    ],
-                    expirience: 'от 1 до 3 года'
-                });
-            }
-            setTimeout(() => {
-                this.setState({listArray, isRequestStarted: false});
-            }, 2000);
+            this.props.fetchVacations({
+                skip: this.state.skip
+            });
+            this.setState(prevState => {
+                return {
+                    skip: prevState.skip + length
+                }
+            });
         }
     }
 
@@ -199,7 +127,7 @@ class FindJob extends PureComponent {
     )
 
     renderCell = ({ key, index, style }) => {
-        const el = this.state.listArray[index];
+        const el = this.props.vacations[index];
         const {
             name,
             id,
@@ -226,9 +154,9 @@ class FindJob extends PureComponent {
                 <div className='jobcell__subhead'>
                     <p className='jobcell__subhead--organization'>{organization}</p>
                     <p className='jobcell__subhead--second'>
-                        <span className='jobcell__subhead--second-city'>{city}</span> 
+                        <span className='jobcell__subhead--second-city'>{city && city.title}</span> 
                         <span className='jobcell__subhead--second-created'>
-                            {formatDate(createdAt)}
+                            {createdAt ? formatDate(new Date(createdAt)) : null}
                         </span>
                     </p>
                 </div>
@@ -262,7 +190,7 @@ class FindJob extends PureComponent {
                         return (
                             <>
                                 <List 
-                                    rowCount={this.state.listArray.length}
+                                    rowCount={this.props.vacations.length}
                                     height={height - 37}
                                     width={width}
                                     rowHeight={150}
@@ -273,7 +201,7 @@ class FindJob extends PureComponent {
                         )
                     }}
                 </AutoSizer>
-                {this.state.isRequestStarted && 
+                {this.props.isLoading && 
                     <Spinner size="regular" style={{ marginTop: 20 }} />}
             </Panel>
         )
@@ -282,7 +210,9 @@ class FindJob extends PureComponent {
 
 export default connect((state) => {
     return {
-        vacations: []
+        vacations: listEntitiesSelector(state),
+        isLoading: listLoadingSelector(state),
+        error: listErrorSelector(state)
     }
 }, {
     fetchVacations

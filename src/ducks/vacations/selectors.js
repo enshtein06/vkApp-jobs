@@ -6,6 +6,13 @@ const stateSelector = state => state[moduleName];
 const methodsSelector = (state) => stateSelector(state).methods;
 const infoSelector = (state) => stateSelector(state).info;
 const listSelector = state => stateSelector(state).list;
+const vkUserListSelector = state => stateSelector(state).vkUserList;
+
+// @desc    vkUserList Selector
+export const vkUserListIsLoadedSelector = state => vkUserListSelector(state).isLoaded;
+export const vkUserListIsLoadingSelector = state => vkUserListSelector(state).isLoading;
+export const vkUserListEntitiesSelector = state => vkUserListSelector(state).entities;
+export const vkUserListErrorSelector = state => vkUserListSelector(state).error;
 
 // @desc    info Selector
 export const infoLoadingSelector = state => infoSelector(state).loading;
@@ -23,6 +30,9 @@ export const createMethodSelector = (state) => {
 }
 export const createMethodLoadingSelector = (state) => {
     return createMethodSelector(state).loading;
+}
+export const createMethodisCreatedSelector = state => {
+    return createMethodSelector(state).isCreated;
 }
 export const createMethodEntitySelector = (state) => {
     return createMethodSelector(state).entity;

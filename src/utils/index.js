@@ -21,5 +21,13 @@ export const formatDate = (date = new Date()) => {
 }
 
 export const serializeParamsToString = (params = {}) => {
-    return ``;
+    const keys = Object.keys(params);
+    if(!keys.length) return '';
+
+    return keys.reduce((result, currentKey, index) => {
+        if(params[currentKey] || params[currentKey] === 0) {
+            return `${result}${index === 0 ? '' : '&'}${currentKey}=${params[currentKey]}`;
+        }
+        return result;
+    }, '?');
 }

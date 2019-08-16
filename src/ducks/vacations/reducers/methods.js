@@ -13,6 +13,7 @@ import {
 const stateStore = {
     create: {
         loading: false,
+        isCreated: false,
         error: null,
         entity: null
     },
@@ -36,6 +37,7 @@ const methodsReducers = (state = stateStore, action) => {
                 ...state,
                 create: {
                     ...state.create,
+                    isCreated: false,
                     loading: true,
                     error: null,
                     entity: null
@@ -46,6 +48,7 @@ const methodsReducers = (state = stateStore, action) => {
                 ...state,
                 create: {
                     ...state.create,
+                    isCreated: true,
                     loading: false,
                     error: null,
                     entity: payload.entity
