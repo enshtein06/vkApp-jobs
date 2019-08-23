@@ -16,6 +16,10 @@
   transform: translate(-50%, -50%);
 }
 
+.mainform-private {
+  margin-top: 20px;
+}
+
 .mainfork-wrapper .FormField  {
   margin: 0 !important;
 }

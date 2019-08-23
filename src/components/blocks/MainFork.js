@@ -2,21 +2,40 @@ import React, { Component } from "react";
 import PropTypes from "prop-types";
 import { connect } from "react-redux";
 import { createVacation } from "../../ducks/vacations";
+import { initialVkUserEntitySelector } from '../../ducks/user';
 import {
   View,
   Panel,
   PanelHeader,
   Button,
   SelectMimicry,
-  FormLayout
+  FormLayout,
+  Group
 } from "@vkontakte/vkui";
+import Icon24User from '@vkontakte/icons/dist/24/user';
 import vkuiConnect from "@vkontakte/vkui-connect";
 import "./MainFork.css";
+
+import {
+  additionalPanel,
+  userVacations,
+  vacationsForModerators,
+  accountVacation,
+  rejectVacation
+} from './Account/routes';
 
 import FindJob from "./FindJob";
 import ExtendedFilters from "./ExtendedFilters";
 import JobPage from "./JobPage";
 import CreateVacation from "./CreateVacation";
+import Account from './Account';
+import Additional from './Account/Additional';
+import AccountVacations from './Account/AccountVacations';
+import VacationsForModerators from './Account/VacationsForModerators';
+import AccountVacation from './Account/AccountVacation';
+import VacationReject from './Account/VacationReject';
+
+const account = 'account';
 
 class MainFork extends Component {
   static propTypes = {
@@ -29,7 +48,9 @@ class MainFork extends Component {
     history: ["mainfork"],
     selected: null,
     createJobValues: {},
-    popout: null
+    popout: null,
+    selectedAccountVacation: null,
+    rejectedVacation: null
   };
 
   goBack = () => {
@@ -65,10 +86,16 @@ class MainFork extends Component {
   };
 
   goToGiveJob = () => this.goForward("createvacation");
+  goToAccountData = () => this.goForward(account);
 
   handleExtendedFiltersSubmit = fields => {
     this.goBack();
   };
+
+  handleAccountCellClick = (vacation) => {
+    this.goForward(accountVacation);
+    this.setState({ selectedAccountVacation: vacation });
+  }
 
   handleCreateJobValuesChange = values => {
     //this.props.createVacation(values);
@@ -76,6 +103,17 @@ class MainFork extends Component {
   };
 
   handlePopuotChange = popout => this.setState({ popout });
+
+  handleVacationReject = (vacation) => {
+    console.log(vacation);
+    console.log(rejectVacation);
+    this.goForward(rejectVacation);
+    this.setState({rejectedVacation: vacation});
+  }
+
+  handleVacationUpClick = (vacation) => {
+    console.log(vacation);
+  }
 
   render() {
     const { id } = this.props;
@@ -86,6 +124,14 @@ class MainFork extends Component {
         <Panel id="mainfork">
           <PanelHeader>Работа</PanelHeader>
           <div className="mainfork">
+            <div className='mainform-private'>
+              <Button
+                before={<Icon24User />}
+                size="xl"
+                level="secondary"
+                onClick={this.goToAccountData}
+              >Личный кабинет</Button>
+            </div>
             <div className="mainfork-wrapper">
               <Button size="xl" onClick={this.goToFindJob} stretched>
                 Ищу работу
@@ -137,6 +183,50 @@ class MainFork extends Component {
           handlePopuotChange={this.handlePopuotChange}
           selectedCity={this.props.selectedCity}
         />
+        <Account
+          id={account}
+          goBack={this.goBack}
+          goToPanel={this.goForward}
+          vkUser={this.props.user}
+          appUser={this.props.initialValues}
+        />
+        <Additional
+          id={additionalPanel}
+          goBack={this.goBack}
+          goToPanel={this.goForward}
+          vkUser={this.props.user}
+          appUser={this.props.initialValues}
+        />
+        <AccountVacations
+          id={userVacations}
+          goBack={this.goBack}
+          goToPanel={this.goForward}
+          vkUser={this.props.user}
+          appUser={this.props.initialValues}
+          handleCellClick={this.handleAccountCellClick}
+        />
+        <VacationsForModerators
+          id={vacationsForModerators}
+          goBack={this.goBack}
+          goToPanel={this.goForward}
+          vkUser={this.props.user}
+          appUser={this.props.initialValues}
+          onVacationReject={this.handleVacationReject}
+        />
+        <AccountVacation
+          id={accountVacation}
+          goBack={this.goBack}
+          goToPanel={this.goForward}
+          user={this.props.user}
+          appUser={this.props.initialValues}
+          vacation={this.state.selectedAccountVacation}
+          handleUpClick={this.handleVacationUpClick}
+        />
+        <VacationReject
+          id={rejectVacation}
+          goBack={this.goBack}
+          vacation={this.state.rejectedVacation}
+        />
       </View>
     );
   }
@@ -144,7 +234,9 @@ class MainFork extends Component {
 
 export default connect(
   state => {
-    return {};
+    return {
+      initialValues: initialVkUserEntitySelector(state)
+    };
   },
   {
     createVacation

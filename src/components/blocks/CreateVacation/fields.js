@@ -66,8 +66,8 @@ export const fields = {
     props: {
       name: "description",
       type: "text",
-      top: "Краткое описание",
-      placeholder: "Это первое, что увидит соискатель при поиске вакансии"
+      top: "Описание",
+      placeholder: "Опишите вакансию для соискателя"
     },
     error: null,
     validate: []

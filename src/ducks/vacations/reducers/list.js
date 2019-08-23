@@ -7,7 +7,8 @@ import {
 const stateStore = {
   loading: false,
   error: null,
-  entities: []
+  entities: [],
+  isAllLoaded: false
 };
 
 export default (state = stateStore, action) => {
@@ -17,13 +18,15 @@ export default (state = stateStore, action) => {
     case FETCH_VACATIONS_START:
       return {
         ...state,
-        loading: true
+        loading: true,
+        entities: payload.shouldClear ? [] : state.entities
       };
     case FETCH_VACATIONS_SUCCESS:
       return {
         ...state,
         loading: false,
-        entities: state.entities.concat(payload.entities)
+        entities: state.entities.concat(payload.entities),
+        isAllLoaded: payload.isAllLoaded
       };
     case FETCH_VACATIONS_ERROR:
       return {

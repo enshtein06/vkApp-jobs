@@ -26,6 +26,7 @@ export const infoEntitiesSelector = state => infoSelector(state).entities;
 export const listLoadingSelector = state => listSelector(state).loading;
 export const listErrorSelector = state => listSelector(state).error;
 export const listEntitiesSelector = state => listSelector(state).entities;
+export const listIsAllLoadedSelector = state => listSelector(state).isAllLoaded;
 
 // @desc    create methods
 export const createMethodSelector = state => {

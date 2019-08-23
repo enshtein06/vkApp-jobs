@@ -12,10 +12,17 @@ export const errors = [
     validate: values => {
       const { vkUser, vacations } = values;
       return !!(
+        vkUser &&
         vkUser.vacationsLimit &&
         Array.isArray(vacations) &&
         vkUser.vacationsLimit < vacations.length
       );
+    }
+  }, {
+    message: 'Вас не удалось распознать',
+    validate: (values) => {
+      const { vkUser } = values;
+      return !vkUser;
     }
   }
 ];

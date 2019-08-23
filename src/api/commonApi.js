@@ -1,5 +1,14 @@
 import { serializeParamsToString } from "../utils";
 
+export const fetchCommomApi = ( url = '' ) => {
+  return {
+    action: `/api/${url}`,
+    options: {
+      method: 'GET'
+    }
+  }
+}
+
 export const fetchEntitiesList = (params = {}, typeEntity = "") => {
   const paramsString = serializeParamsToString(params);
   return {

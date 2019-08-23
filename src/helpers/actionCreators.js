@@ -1,8 +1,9 @@
-export const fetchEntities = action => (params = {}) => {
+export const fetchEntities = action => (params = {}, shouldClear = false) => {
   return {
     type: action,
     payload: {
-      params
+      params,
+      shouldClear
     }
   };
 };

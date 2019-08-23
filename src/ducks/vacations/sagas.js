@@ -5,6 +5,11 @@ import {
   FETCH_VACATIONS_START,
   FETCH_VACATIONS_SUCCESS,
   FETCH_VACATIONS_ERROR,
+  // fetch list of vacations to moderate
+  FETCH_VACATIONS_TO_MODERATE_REQUEST,
+  FETCH_VACATIONS_TO_MODERATE_START,
+  FETCH_VACATIONS_TO_MODERATE_SUCCESS,
+  FETCH_VACATIONS_TO_MODERATE_ERROR,
   // fetch one vacation
   FETCH_VACATION_REQUEST,
   FETCH_VACATION_START,
@@ -36,13 +41,40 @@ import {
   fetchEntity,
   createEntity,
   updateEntity,
-  deleteEntity
+  deleteEntity,
+  fetchCommomApi
 } from "../../api/commonApi";
 import { moduleName, entityType } from "./config";
 import fetchApi from "../../helpers/fetchApi";
 
 import { vkUserIdSelector } from "../user";
 import { lookupsValuesSelector } from "../lookups";
+
+function* fetchVacationsToModerateSaga (action) {
+  yield put({ type: FETCH_VACATIONS_TO_MODERATE_START });
+  try {
+    const requestParams = fetchEntitiesList({
+      isAllowed: false
+    }, entityType);
+    const fetchParams = yield fetchApi(requestParams);
+    const data = yield call(fetchParams);
+
+    yield put({
+      type: FETCH_VACATIONS_TO_MODERATE_SUCCESS,
+      payload: {
+        ...action.payload,
+        ...data.payload,
+        //entities: data.payload.entities,
+        //isAllLoaded: data.payload.isAllLoaded
+      }
+    });
+  } catch (error) {
+    yield put({
+      type: FETCH_VACATIONS_TO_MODERATE_ERROR,
+      error
+    });
+  }
+}
 
 export function* fetchVacationsSaga(
   action = {
@@ -65,7 +97,9 @@ export function* fetchVacationsSaga(
       type: FETCH_VACATIONS_SUCCESS,
       moduleName,
       payload: {
-        entities: data.payload
+        ...data.payload,
+        //entities: data.payload.entities,
+        //isAllLoaded: data.payload.isAllLoaded
       }
     });
   } catch (error) {
@@ -305,6 +339,7 @@ export function* rootSaga() {
     takeEvery(
       FETCH_VACATIONS_FOR_VK_USER_REQUEST,
       fetchEntitiesListForVkUserSaga
-    )
+    ),
+    takeEvery(FETCH_VACATIONS_TO_MODERATE_REQUEST, fetchVacationsToModerateSaga)
   ]);
 }

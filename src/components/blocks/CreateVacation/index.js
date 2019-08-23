@@ -20,7 +20,8 @@ import {
   Textarea,
   Select,
   Button,
-  Alert
+  Alert,
+  Group
 } from "@vkontakte/vkui";
 import HeadButton from "../../commons/buttons/HeadButton";
 import { fields } from "./fields";
@@ -118,7 +119,7 @@ class CreateVacation extends PureComponent {
   handleCreateButtonClick = () => {
     this.props.createVacation({
       ...this.state.values,
-      vkUserId: this.props.user.id,
+      vkUserId: this.props.user && this.props.user.id,
       city: this.props.selectedCity,
       user: this.props.user
     });
@@ -220,7 +221,79 @@ class CreateVacation extends PureComponent {
       contact_email,
       address
     } = fields;
+    /**
+     * this form is gonna use:
+     * 1) Name
+     * 2) Description
+     * 3) salary
+     * 4) expirience
+     * 5) employmentType
+     * 6) schedule
+     * 7) address
+     * 8) name of organization
+     */
     return (
+      <FormLayout>
+        <Input {...name.props} onChange={this.handleChangeField} />
+        <Input {...organization.props} onChange={this.handleChangeField} />
+        <FormLayoutGroup top="Заработная плата">
+          <Input {...salaryFrom.props} onChange={this.handleChangeField} />
+          <Input {...salaryTo.props} onChange={this.handleChangeField} />
+        </FormLayoutGroup>
+        <Textarea {...description.props} onChange={this.handleChangeField} />
+        <Select
+          {...expirience.props}
+          onChange={this.handleChangeField}
+          value={this.state.values[expirience.id]}
+        >
+          {this.props.lookups && this.props.lookups[expirience.lookupKey]
+            ? this.props.lookups[expirience.lookupKey].map(el => {
+                return <option value={el.id}>{el.title}</option>;
+              })
+            : emptyArr}
+        </Select>
+        <Select
+          {...employmentType.props}
+          onChange={this.handleChangeField}
+          value={this.state.values[employmentType.id]}
+        >
+          {this.props.lookups && this.props.lookups[employmentType.lookupKey]
+            ? this.props.lookups[employmentType.lookupKey].map(el => {
+                return <option value={el.id}>{el.title}</option>;
+              })
+            : emptyArr}
+        </Select>
+        <Select
+          {...schedule.props}
+          onChange={this.handleChangeField}
+          value={this.state.values[schedule.id]}
+        >
+          {this.props.lookups && this.props.lookups[schedule.lookupKey]
+            ? this.props.lookups[schedule.lookupKey].map(el => {
+                return <option value={el.id}>{el.title}</option>;
+              })
+            : emptyArr}
+        </Select>
+        <Input {...address.props} onChange={this.handleChangeField} />
+        <FormLayoutGroup top="Контакты">
+          <Input {...contact_name.props} onChange={this.handleChangeField} />
+          <Input {...contact_numbers.props} onChange={this.handleChangeField} />
+        </FormLayoutGroup>
+
+        <Button
+          size="xl"
+          onClick={this.handleCreateButtonClick}
+          disabled={
+            !!Object.keys(this.state.errors).some(
+              errorKey => this.state.errors[errorKey]
+            )
+          }
+        >
+          Создать вакансию
+        </Button>
+      </FormLayout>
+    )
+    /*return (
       <FormLayout>
         <Input {...name.props} onChange={this.handleChangeField} />
         <FormLayoutGroup top="Заработная плата">
@@ -393,7 +466,7 @@ class CreateVacation extends PureComponent {
           Создать вакансию
         </Button>
       </FormLayout>
-    );
+    );*/
   };
 
   render() {

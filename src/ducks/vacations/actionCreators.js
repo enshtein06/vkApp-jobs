@@ -1,5 +1,6 @@
 import {
   FETCH_VACATIONS_REQUEST,
+  FETCH_VACATIONS_TO_MODERATE_REQUEST,
   FETCH_VACATION_REQUEST,
   CREATE_VACATION_REQUEST,
   UPDATE_VACATION_REQUEST,
@@ -17,6 +18,13 @@ import {
 } from "../../helpers/actionCreators";
 
 export const fetchVacations = fetchEntities(FETCH_VACATIONS_REQUEST);
+
+export const fetchVacationsToModerate = (shouldClear) => {
+  return {
+    type: FETCH_VACATIONS_TO_MODERATE_REQUEST,
+    payload: shouldClear
+  }
+}
 
 export const fetchVacation = fetchEntity(FETCH_VACATION_REQUEST);
 

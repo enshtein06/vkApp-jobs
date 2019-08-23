@@ -6,7 +6,8 @@ import {
   fetchVacations,
   listEntitiesSelector,
   listLoadingSelector,
-  listErrorSelector
+  listErrorSelector,
+  listIsAllLoadedSelector
 } from "../../../ducks/vacations";
 
 import {
@@ -34,41 +35,45 @@ class FindJob extends PureComponent {
     goToPanel: PropTypes.func,
     vacations: PropTypes.arrayOf(
       PropTypes.shape({
-        name: PropTypes.string,
-        salary: PropTypes.string,
-        organization: PropTypes.shape({
-          id: PropTypes.number,
-          name: PropTypes.string
-        }),
+        activities: PropTypes.arrayOf(PropTypes.string),
+        address: PropTypes.string,
+        bonuses: PropTypes.arrayOf(PropTypes.string),
         city: PropTypes.shape({
-          id: PropTypes.number,
-          name: PropTypes.string
+          id: PropTypes.string,
+          title: PropTypes.string
         }),
-        createdAt: PropTypes.object,
-        description: PropTypes.string,
         contacts: PropTypes.arrayOf(
           PropTypes.shape({
             name: PropTypes.string,
-            numbers: PropTypes.string
+            numbers: PropTypes.string,
+            email: PropTypes.string
           })
         ),
-        address: PropTypes.string,
+        createdAt: PropTypes.object,
+        description: PropTypes.string,
         employmentType: PropTypes.shape({
           id: PropTypes.number,
-          name: PropTypes.string
+          title: PropTypes.string
         }),
-        requirments: PropTypes.arrayOf(PropTypes.string),
-        wishes: PropTypes.arrayOf(PropTypes.string),
-        activities: PropTypes.arrayOf(PropTypes.string),
-        bonuses: PropTypes.arrayOf(PropTypes.string),
         expirience: PropTypes.shape({
           id: PropTypes.number,
-          name: PropTypes.string
+          title: PropTypes.string
         }),
-        shedule: PropTypes.shape({
+        name: PropTypes.string,
+        organization: PropTypes.string,
+        requirments: PropTypes.arrayOf(PropTypes.string),
+        salaryFrom: PropTypes.string,
+        salaryTo: PropTypes.string,
+        schedule: PropTypes.shape({
           id: PropTypes.number,
           name: PropTypes.string
-        })
+        }),
+        updatedAt: PropTypes.object,
+        user: PropTypes.shape({
+          first_name: PropTypes.string,
+          last_name: PropTypes.string
+        }),
+        wishes: PropTypes.arrayOf(PropTypes.string)
       })
     ),
     selectedCity: PropTypes.object,
@@ -77,13 +82,13 @@ class FindJob extends PureComponent {
 
   state = {
     search: "",
-    skip: 0
+    skip: 20
   };
 
   componentDidMount = () => {
     this.props.fetchVacations({
-      skip: this.state.skip
-    });
+      skip: 0
+    }, true);
   };
 
   handleSearchChange = search => this.setState({ search });
@@ -108,16 +113,17 @@ class FindJob extends PureComponent {
   handleListScroll = data => {
     const { clientHeight, scrollHeight, scrollTop } = data;
     const length = this.props.vacations.length;
+    if(this.props.isAllLoaded || this.props.isLoading) return null;
     if (
       !this.props.isLoading &&
-      scrollHeight < clientHeight + scrollTop + (scrollHeight * 10) / 100
+      scrollHeight < (clientHeight + scrollTop + (scrollHeight * 10) / 100)
     ) {
       this.props.fetchVacations({
         skip: this.state.skip
       });
       this.setState(prevState => {
         return {
-          skip: prevState.skip + length
+          skip: prevState.skip + 20
         };
       });
     }
@@ -127,9 +133,40 @@ class FindJob extends PureComponent {
     <HeadButton onClick={this.handleBackClick} data-to="home" />
   );
 
-  renderCell = ({ key, index, style }) => {
+  renderSalary = ({salaryTo, salaryFrom}) => {
+    let salary = null;
+    switch (true) {
+      case (!!(salaryFrom && !salaryTo)):
+        salary = `${salaryFrom} руб.`;
+        break;
+      case (!!(salaryTo && !salaryFrom)):
+        salary = `${salaryTo} руб.`;
+        break;
+      case (!!(salaryTo && salaryFrom)):
+        salary = `${salaryFrom}${salaryTo && salaryFrom ? ` - ${salaryTo}` : ''} руб.`;
+        break;
+      default:
+        break;
+    }
+
+    return salary;
+  }
+
+  renderCell = ({ key, index, style, parent, ...restValues }) => {
     const el = this.props.vacations[index];
-    const { name, id, salary, organization, city, createdAt, description } = el;
+    const {
+      name,
+      salaryTo,
+      salaryFrom,
+      organization,
+      city,
+      createdAt,
+      description
+    } = el;
+    const { width } = parent.props;
+
+    const salary = this.renderSalary(el);
+
     return (
       <div
         key={key}
@@ -156,7 +193,7 @@ class FindJob extends PureComponent {
           </p>
         </div>
         <div className="jobcell__body">
-          {reduceStringLength(description, 200)}
+          {reduceStringLength(description, Math.round(width / 2))}
         </div>
       </div>
     );
@@ -167,14 +204,12 @@ class FindJob extends PureComponent {
     return (
       <Panel id={id}>
         <PanelHeader left={this.renderHeadButton}>
-          <PanelHeaderContent
-            aside={<Icon16Dropdown />}
-            onClick={this.handleToggleContext}
-          >
+          <PanelHeaderContent>
+          {/* aside={<Icon16Dropdown />} onClick={this.handleToggleContext} */}
             Вакансии
           </PanelHeaderContent>
         </PanelHeader>
-        <HeaderContext
+        {/*<HeaderContext
           opened={this.state.contextOpened}
           onClose={this.handleToggleContext}
         >
@@ -183,7 +218,7 @@ class FindJob extends PureComponent {
               Расширенные фильтры
             </Cell>
           </VkList>
-        </HeaderContext>
+        </HeaderContext>*/}
         <Search value={this.state.search} onChange={this.handleSearchChange} />
         <AutoSizer>
           {({ height, width }) => {
@@ -214,7 +249,8 @@ export default connect(
     return {
       vacations: listEntitiesSelector(state),
       isLoading: listLoadingSelector(state),
-      error: listErrorSelector(state)
+      error: listErrorSelector(state),
+      isAllLoaded: listIsAllLoadedSelector(state)
     };
   },
   {
