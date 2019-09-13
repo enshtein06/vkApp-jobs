@@ -6,7 +6,10 @@ import {
   listEntitiesSelector,
   listIsAllLoadedSelector,
   listLoadingSelector,
-  listErrorSelector
+  listErrorSelector,
+  rejectedEntitiesSelector,
+  allowVacation,
+  allowedEntitiesSelector
 } from '../../../ducks/vacations';
 
 import {
@@ -38,6 +41,7 @@ class VacationsForModerators extends PureComponent {
 
   componentDidMount = () => {
     this.props.fetchVacations({
+      isRejectedToShow: false,
       isAllowToShow: false,
       skip: 0
     }, true);
@@ -45,7 +49,9 @@ class VacationsForModerators extends PureComponent {
 
   handleLoadVacations = () => {
     this.props.fetchVacations({
-      skip: this.state.skip
+      skip: this.state.skip,
+      isAllowToShow: false,
+      isRejectedToShow: false
     });
     this.setState(prevState => {
       return {
@@ -65,6 +71,35 @@ class VacationsForModerators extends PureComponent {
         {!!this.props.isLoading && <Spinner size='regular' />}
         <List>
           {this.props.vacations.map(vac => {
+            let content = (
+              <Div style={{display: 'flex'}}>
+                <Button
+                  size="l"
+                  stretched
+                  style={{ marginRight: 8 }}
+                  onClick={() => this.props.allowVacation(vac)}
+                >Разместить</Button>
+                <Button
+                  size="l"
+                  stretched
+                  level="secondary"
+                  onClick={() => this.props.onVacationReject(vac)}
+                >Отказать</Button>
+              </Div>
+            );
+            if(this.props.allowed.some(id => id === vac._id)) {
+              content = (
+                <Div style={{color: '#5181b8', fontWeight: 900}}>
+                  Разрешено!
+                </Div>
+              );
+            } else if(this.props.rejected.some(id => id === vac._id)) {
+              content = (
+                <Div style={{color: '#E81C27', fontWeight: 900}}>
+                  Отказано!
+                </Div>
+              )
+            }
             return (
               <Div>
                 <h3>Имя: {vac.name}</h3>
@@ -79,30 +114,20 @@ class VacationsForModerators extends PureComponent {
                   имя - {vac.contact && vac.contact.name ? vac.contact.name : 'Не указано'} |
                   номер - {vac.contact && vac.contact.numbers ? vac.contact.numbers : 'Не указано'}
                 </p>
-                <Div style={{display: 'flex'}}>
-                  <Button
-                    size="l"
-                    stretched
-                    style={{ marginRight: 8 }}
-                  >Разместить</Button>
-                  <Button
-                    size="l"
-                    stretched
-                    level="secondary"
-                    onClick={() => this.props.onVacationReject(vac)}
-                  >Отказать</Button>
-                </Div>
+                {content}
                 <Separator />
               </Div>
             )
           })}
           {!!this.props.isAllLoaded ? (
-            <div>Загружены все вакансии</div>
+            <Div>Загружены все вакансии</Div>
           ) : (
-            <Button
-              onClick={this.handleLoadVacations}
-              size="xl"
-            >Загрузить еще</Button>
+            <Div>
+              <Button
+                onClick={this.handleLoadVacations}
+                size="xl"
+              >Загрузить еще</Button>
+            </Div>
           )}
         </List>
       </Panel>
@@ -116,6 +141,7 @@ export default connect((state) => {
     isLoading: listLoadingSelector(state),
     isAllLoaded: listIsAllLoadedSelector(state),
     error: listErrorSelector(state),
-    allowed: []
+    allowed: allowedEntitiesSelector(state),
+    rejected: rejectedEntitiesSelector(state)
   }
-}, {fetchVacations})(VacationsForModerators);
+}, {fetchVacations, allowVacation})(VacationsForModerators);

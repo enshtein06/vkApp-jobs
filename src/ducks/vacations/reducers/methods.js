@@ -20,7 +20,8 @@ const stateStore = {
   update: {
     loading: false,
     error: null,
-    entity: null
+    entity: null,
+    isLoaded: false
   },
   delete: {
     loading: false,
@@ -71,7 +72,8 @@ const methodsReducers = (state = stateStore, action) => {
           ...state.update,
           loading: true,
           error: null,
-          entity: null
+          entity: null,
+          isLoaded: false
         }
       };
     case UPDATE_VACATION_SUCCESS:
@@ -81,7 +83,8 @@ const methodsReducers = (state = stateStore, action) => {
           ...state.update,
           loading: false,
           error: null,
-          entity: payload.entity
+          entity: payload.entity,
+          isLoaded: true
         }
       };
     case UPDATE_VACATION_ERROR:
@@ -91,7 +94,8 @@ const methodsReducers = (state = stateStore, action) => {
           ...state.update,
           loading: false,
           error,
-          entity: null
+          entity: error,
+          isLoaded: true
         }
       };
     case DELETE_VACATION_START:

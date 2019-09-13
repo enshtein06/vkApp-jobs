@@ -40,11 +40,11 @@ export const createEntityNormalization = action => (
   };
 };
 
-export const updateEntity = action => (id, values) => {
+export const updateEntity = action => (entityId, values) => {
   return {
     type: action,
     payload: {
-      id,
+      entityId,
       values
     }
   };

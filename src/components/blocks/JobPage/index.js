@@ -96,7 +96,8 @@ class JobPage extends PureComponent {
       schedule,
       updatedAt,
       user,
-      wishes
+      wishes,
+      contact
     } = entity;
 
     const salary = this.renderSalary(entity);
@@ -109,7 +110,10 @@ class JobPage extends PureComponent {
           <p className="jobpage__organization">Организация: {organization}</p>
           {createdAt && <p className="jobpage__created">Создано: {formatDate(new Date(createdAt))}</p>}
           <p className="jobpage__address">
-            Где: {address}, {city && city.title}
+            Где: {address && city && city.title ?
+                  `${address}, ${city.title}` :
+                  'Не указано'
+                }
           </p>
           { !!(expirience) &&
             <p className="jobpage__expirience">
@@ -132,7 +136,7 @@ class JobPage extends PureComponent {
             )
           }
           <p className="jobpage__description">{description}</p>
-          {!!requirments && Array.isArray(requirments) && !!requirments.length (
+          {!!requirments && Array.isArray(requirments) && !!requirments.length && (
             <div className="jobpage__requirments">
               <h4>Требования к кандидату:</h4>
               {requirments.map((requirment, index) => {
@@ -140,7 +144,7 @@ class JobPage extends PureComponent {
               })}
             </div>
           )}
-          {!!wishes && (
+          {!!wishes && Array.isArray(wishes) && !!wishes.length && (
             <div className="jobpage__wish">
               <h4>Будет плюсом:</h4>
               {wishes.map((wish, index) => {
@@ -148,7 +152,7 @@ class JobPage extends PureComponent {
               })}
             </div>
           )}
-          {!!activities && (
+          {!!activities && Array.isArray(activities) && !!activities.length  && (
             <div className="jobpage__activity">
               <h4>Чем вы будете заниматься:</h4>
               {activities.map((activity, index) => {
@@ -156,7 +160,7 @@ class JobPage extends PureComponent {
               })}
             </div>
           )}
-          {!!bonuses && (
+          {!!bonuses && Array.isArray(bonuses) && !!bonuses.length  && (
             <div className="jobpage__bonuses">
               <h4>Вы получите:</h4>
               {bonuses.map((bonuse, index) => {
@@ -164,7 +168,7 @@ class JobPage extends PureComponent {
               })}
             </div>
           )}
-          {!!contacts && (
+          {!!contacts && Array.isArray(contacts) && !!contacts.length  && (
             <div className="jobpage__contacts">
               <h4>Контакты:</h4>
               {contacts.map(contact => {
@@ -176,9 +180,21 @@ class JobPage extends PureComponent {
               })}
             </div>
           )}
-          {/*<div className="jobpage__answer">
-            <button>ОТКЛИКНУТЬСЯ</button>
-            </div>*/}
+          {contact && (
+            <div className="jobpage__contacts">
+              <h4>Контакты:</h4>
+              {contact.name && <p>
+                <span>Имя: </span>
+                {contact.name && <span>{contact.name}</span>}
+              </p>}
+              {contact.numbers && (
+                <p>
+                  <span>Номер: </span>
+                  {contact.numbers && <span>{contact.numbers}</span>}
+                </p>
+              )}
+            </div>
+          )}
         </div>
       </Panel>
     );

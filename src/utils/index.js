@@ -27,7 +27,7 @@ export const serializeParamsToString = (params = {}) => {
   if (!keys.length) return "";
 
   return keys.reduce((result, currentKey, index) => {
-    if (params[currentKey] || params[currentKey] === 0) {
+    if (params[currentKey] || params[currentKey] !== undefined) {
       return `${result}${index === 0 ? "" : "&"}${currentKey}=${
         params[currentKey]
       }`;

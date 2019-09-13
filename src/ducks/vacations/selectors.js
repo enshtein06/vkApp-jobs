@@ -7,6 +7,8 @@ const methodsSelector = state => stateSelector(state).methods;
 const infoSelector = state => stateSelector(state).info;
 const listSelector = state => stateSelector(state).list;
 const vkUserListSelector = state => stateSelector(state).vkUserList;
+const rejectedSelector = state => stateSelector(state).rejected;
+const allowedSelector = state => stateSelector(state).allowed;
 
 // @desc    vkUserList Selector
 export const vkUserListIsLoadedSelector = state =>
@@ -52,6 +54,9 @@ export const updateMethodSelector = state => {
 export const updateMethodLoadingSelector = state => {
   return updateMethodSelector(state).loading;
 };
+export const updateMethodIsLoadedSelector = state => {
+  return updateMethodSelector(state).isLoaded;
+};
 export const updateMethodEntitySelector = state => {
   return updateMethodSelector(state).entity;
 };
@@ -72,3 +77,31 @@ export const deleteMethodEntitySelector = state => {
 export const deleteMethodErrorSelector = state => {
   return deleteMethodSelector(state).error;
 };
+
+// @desc rejected
+export const rejectedEntitiesSelector = (state) => {
+  return rejectedSelector(state).rejectedEntities;
+}
+export const rejectedIsLoadingSelector = (state) => {
+  return rejectedSelector(state).isLoading;
+}
+export const rejectedProcessIdSelector = (state) => {
+  return rejectedSelector(state).processId;
+}
+export const rejectedErrorSelector = (state) => {
+  return rejectedSelector(state).error;
+}
+
+// @desc allowed
+export const allowedEntitiesSelector = (state) => {
+  return allowedSelector(state).allowedEntities;
+}
+export const allowedIsLoadingSelector = (state) => {
+  return allowedSelector(state).isLoading;
+}
+export const allowedProcessIdSelector = (state) => {
+  return allowedSelector(state).processId;
+}
+export const allowedErrorSelector = (state) => {
+  return allowedSelector(state).error;
+}

@@ -34,7 +34,17 @@ import {
   FETCH_VACATIONS_FOR_VK_USER_REQUEST,
   FETCH_VACATIONS_FOR_VK_USER_START,
   FETCH_VACATIONS_FOR_VK_USER_SUCCESS,
-  FETCH_VACATIONS_FOR_VK_USER_ERROR
+  FETCH_VACATIONS_FOR_VK_USER_ERROR,
+  // reject vacation
+  REJECT_VACATION_REQUEST,
+  REJECT_VACATION_START,
+  REJECT_VACATION_SUCCESS,
+  REJECT_VACATION_ERROR,
+  // reject vacation
+  ALLOW_VACATION_REQUEST,
+  ALLOW_VACATION_START,
+  ALLOW_VACATION_SUCCESS,
+  ALLOW_VACATION_ERROR
 } from "./actions";
 import {
   fetchEntitiesList,
@@ -49,6 +59,7 @@ import fetchApi from "../../helpers/fetchApi";
 
 import { vkUserIdSelector } from "../user";
 import { lookupsValuesSelector } from "../lookups";
+import { fetchVacationsForVkUser } from './actionCreators';
 
 function* fetchVacationsToModerateSaga (action) {
   yield put({ type: FETCH_VACATIONS_TO_MODERATE_START });
@@ -160,31 +171,17 @@ export function* createVacationSaga(
     const normalizedValues = {
       ...values
     };
-    if (
-      values.contact_name &&
-      Array.isArray(values.contact_name) &&
-      values.contact_name.length
-    ) {
-      const contacts = [];
-      values.contact_name.map((name, index) => {
-        contacts.push({
-          name: name,
-          numbers:
-            (values.contact_numbers &&
-              Array.isArray(values.contact_numbers) &&
-              values.contact_numbers[index]) ||
-            null,
-          email:
-            (values.contact_email &&
-              Array.isArray(values.contact_email) &&
-              values.contact_email[index]) ||
-            null
-        });
-      });
+    if(values.contact_name) {
+      normalizedValues.contact = normalizedValues.contact || {};
+      normalizedValues.contact.name = values.contact_name;
+
       delete normalizedValues.contact_name;
+    }
+    if(values.contact_numbers) {
+      normalizedValues.contact = normalizedValues.contact || {};
+      normalizedValues.contact.numbers = values.contact_numbers;
+
       delete normalizedValues.contact_numbers;
-      delete normalizedValues.contact_email;
-      normalizedValues.contacts = contacts;
     }
     const lookups = yield select(lookupsValuesSelector);
     if (
@@ -251,7 +248,49 @@ export function* updateEntitySaga(
   yield put({ type: UPDATE_VACATION_START });
 
   try {
-    const requestParams = updateEntity(values, entityId, entityType);
+    const normalizedValues = {...values};
+    if(values.contact_name) {
+      normalizedValues.contact = normalizedValues.contact || {};
+      normalizedValues.contact.name = values.contact_name;
+
+      delete normalizedValues.contact_name;
+    }
+    if(values.contact_numbers) {
+      normalizedValues.contact = normalizedValues.contact || {};
+      normalizedValues.contact.numbers = values.contact_numbers;
+
+      delete normalizedValues.contact_numbers;
+    }
+    const lookups = yield select(lookupsValuesSelector);
+    if (
+      values.expirience &&
+      lookups.expirience &&
+      Array.isArray(lookups.expirience)
+    ) {
+      normalizedValues.expirience = lookups.expirience.find(
+        exp => exp.id === +values.expirience
+      );
+    }
+    if (
+      values.employmentType &&
+      lookups.employmentType &&
+      Array.isArray(lookups.employmentType)
+    ) {
+      normalizedValues.employmentType = lookups.employmentType.find(
+        exp => exp.id === +values.employmentType
+      );
+    }
+    if (
+      values.schedule &&
+      lookups.schedule &&
+      Array.isArray(lookups.schedule)
+    ) {
+      normalizedValues.schedule = lookups.schedule.find(
+        exp => exp.id === +values.schedule
+      );
+    }
+
+    const requestParams = updateEntity(entityId, normalizedValues, entityType);
     const fetchParams = yield fetchApi(requestParams);
     const data = yield call(fetchParams);
 
@@ -262,6 +301,9 @@ export function* updateEntitySaga(
         entity: data.payload
       }
     });
+
+    const vkUserId = yield select(vkUserIdSelector);
+    yield put(fetchVacationsForVkUser(vkUserId));
   } catch (error) {
     yield put({
       type: UPDATE_VACATION_ERROR,
@@ -329,6 +371,75 @@ export function* fetchEntitiesListForVkUserSaga(action) {
   }
 }
 
+function* rejectVacationSaga(action = {
+  payload: {
+    vacation: null
+  }
+}) {
+  yield put({
+    type: REJECT_VACATION_START,
+    payload: action.payload
+  });
+  const { vacation, reason } = action.payload;
+  try {
+    const newVac = {
+      ...vacation,
+      isRejectedToShow: true,
+      rejectedReason: reason
+    };
+    const requestParams = updateEntity(vacation._id, newVac, entityType);
+    const fetchParams = fetchApi(requestParams);
+    const data = yield call(fetchParams);
+
+    yield put({
+      type: REJECT_VACATION_SUCCESS,
+      payload: {
+        vacationId: vacation._id,
+        vacation: data.payload
+      }
+    });
+  } catch (error) {
+    yield put({
+      type: REJECT_VACATION_ERROR,
+      error
+    });
+  }
+}
+
+function* allowVacationSaga(action = {
+  payload: {
+    vacation: null
+  }
+}) {
+  yield put({
+    type: ALLOW_VACATION_START,
+    payload: action.payload
+  });
+  const { vacation } = action.payload;
+  try {
+    const newVac = {
+      ...vacation,
+      isAllowToShow: true
+    };
+    const requestParams = updateEntity(vacation._id, newVac, entityType);
+    const fetchParams = fetchApi(requestParams);
+    const data = yield call(fetchParams);
+
+    yield put({
+      type: ALLOW_VACATION_SUCCESS,
+      payload: {
+        vacationId: vacation._id,
+        vacation: data.payload
+      }
+    });
+  } catch (error) {
+    yield put({
+      type: ALLOW_VACATION_ERROR,
+      error
+    });
+  }
+}
+
 export function* rootSaga() {
   yield all([
     takeEvery(FETCH_VACATIONS_REQUEST, fetchVacationsSaga),
@@ -340,6 +451,8 @@ export function* rootSaga() {
       FETCH_VACATIONS_FOR_VK_USER_REQUEST,
       fetchEntitiesListForVkUserSaga
     ),
-    takeEvery(FETCH_VACATIONS_TO_MODERATE_REQUEST, fetchVacationsToModerateSaga)
+    takeEvery(FETCH_VACATIONS_TO_MODERATE_REQUEST, fetchVacationsToModerateSaga),
+    takeEvery(REJECT_VACATION_REQUEST, rejectVacationSaga),
+    takeEvery(ALLOW_VACATION_REQUEST, allowVacationSaga)
   ]);
 }

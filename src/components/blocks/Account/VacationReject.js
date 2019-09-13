@@ -1,5 +1,13 @@
 import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
+import { connect } from 'react-redux';
+import {
+  rejectVacation,
+  rejectedEntitiesSelector,
+  rejectedIsLoadingSelector,
+  rejectedErrorSelector,
+  rejectedProcessIdSelector
+} from '../../../ducks/vacations';
 import {
   Panel,
   PanelHeader,
@@ -14,11 +22,22 @@ class VacationReject extends PureComponent {
   static propTypes = {
     id: PropTypes.string.isRequired,
     vacation: PropTypes.object.isRequired,
-    handleReject: PropTypes.func.isRequired
+    handleReject: PropTypes.func.isRequired,
+    goBack: PropTypes.func
   }
 
   state = {
     rejectReason: 'Вам отказано в размещении, по причине: '
+  }
+
+  componentDidUpdate = (prevProps) => {
+    if(
+      !!prevProps.isLoading &&
+      !this.props.isLoading &&
+      this.props.rejectedVacationIds.some(id => this.props.vacation._id === id)
+    ) {
+      this.props.goBack();
+    }
   }
 
   handleChange = (e) => {
@@ -26,7 +45,7 @@ class VacationReject extends PureComponent {
     this.setState({ [name]: value });
   }
 
-  handleClick = () => this.props.handleReject(this.props.vacation)
+  handleClick = () => this.props.rejectVacation(this.props.vacation, this.state.rejectReason)
 
   render() {
     return (
@@ -50,4 +69,11 @@ class VacationReject extends PureComponent {
   }
 }
 
-export default VacationReject;
+export default connect((state, props) => {
+  return {
+    rejectedVacationIds: rejectedEntitiesSelector(state),
+    isLoading: rejectedIsLoadingSelector(state),
+    error: rejectedErrorSelector(state),
+    processId: rejectedProcessIdSelector(state)
+  }
+}, { rejectVacation })(VacationReject);

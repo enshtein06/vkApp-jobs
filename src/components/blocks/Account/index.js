@@ -42,11 +42,11 @@ const Account = memo((props) => {
       </PanelHeader>
       <Group>
         <List>
-          <Cell
+          {/*<Cell
             before={<Icon24Gift />}
             asideContent={<Icon24BrowserForward />}
             onClick={() => props.goToPanel(additionalPanel)}
-          >Дополнительные возможности</Cell>
+          >Дополнительные возможности</Cell>*/}
           <Cell
             before={<Icon24Document />}
             asideContent={<Icon24BrowserForward />}

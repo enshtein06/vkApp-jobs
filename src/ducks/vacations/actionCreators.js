@@ -5,7 +5,9 @@ import {
   CREATE_VACATION_REQUEST,
   UPDATE_VACATION_REQUEST,
   DELETE_VACATION_REQUEST,
-  FETCH_VACATIONS_FOR_VK_USER_REQUEST
+  FETCH_VACATIONS_FOR_VK_USER_REQUEST,
+  REJECT_VACATION_REQUEST,
+  ALLOW_VACATION_REQUEST
 } from "./actions";
 import {
   fetchEntities,
@@ -48,3 +50,17 @@ export const fetchVacationsForVkUser = vkUserId => {
     payload: { vkUserId }
   };
 };
+
+export const rejectVacation = (vacation, reason) => {
+  return {
+    type: REJECT_VACATION_REQUEST,
+    payload: { vacation, reason }
+  }
+}
+
+export const allowVacation = vacation => {
+  return {
+    type: ALLOW_VACATION_REQUEST,
+    payload: { vacation }
+  }
+}

@@ -40,7 +40,7 @@ export const createEntity = (values = {}, typeEntity = "") => {
 
 export const updateEntity = (entityId = "", values = {}, typeEntity = "") => {
   return {
-    action: `/api/${typeEntity}/:${entityId}`,
+    action: `/api/${typeEntity}/${entityId}`,
     options: {
       method: "PUT",
       body: JSON.stringify(values)
@@ -50,7 +50,7 @@ export const updateEntity = (entityId = "", values = {}, typeEntity = "") => {
 
 export const deleteEntity = (entityId = "", typeEntity = "") => {
   return {
-    action: `/api/${typeEntity}/:${entityId}`,
+    action: `/api/${typeEntity}/${entityId}`,
     options: {
       method: "DELETE"
     }

@@ -1,5 +1,6 @@
 import React, { Component } from "react";
 import PropTypes from "prop-types";
+import vkConnect from "@vkontakte/vkui-connect";
 import { connect } from "react-redux";
 import { createVacation } from "../../ducks/vacations";
 import { initialVkUserEntitySelector } from '../../ducks/user';
@@ -50,17 +51,18 @@ class MainFork extends Component {
     createJobValues: {},
     popout: null,
     selectedAccountVacation: null,
-    rejectedVacation: null
+    rejectedVacation: null,
+    lastPage: ''
   };
 
   goBack = () => {
     const history = [...this.state.history];
-    history.pop();
+    const lastPage = history.pop();
     const activePanel = history[history.length - 1];
     if (activePanel === "mainfork") {
       vkuiConnect.send("VKWebAppDisableSwipeBack");
     }
-    this.setState({ history, activePanel });
+    this.setState({ history, activePanel, lastPage });
   };
 
   goForward = activePanel => {
@@ -113,6 +115,16 @@ class MainFork extends Component {
 
   handleVacationUpClick = (vacation) => {
     console.log(vacation);
+    vkConnect.send(
+      'VKWebAppOpenPayForm', {
+        app_id: 6999920,
+        action: "pay-to-use",
+        params: {
+          amount: 50,
+          description: 'description',
+          user_id: 273505331
+        }
+    });
   }
 
   render() {
@@ -162,6 +174,7 @@ class MainFork extends Component {
           goToPanel={this.goForward}
           handleCellClick={this.handleCellClick}
           selectedCity={this.props.selectedCity}
+          lastPage={this.state.lastPage}
         />
         <ExtendedFilters
           id="extendedfilters"

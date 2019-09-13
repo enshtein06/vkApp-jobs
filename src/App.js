@@ -41,6 +41,7 @@ class App extends React.Component {
           console.log(e);
       }
     });
+    connect.send("VKWebAppInit", {});
     connect.send("VKWebAppGetUserInfo", {});
     this.props.requestLookupsVkApi("database.getCities", "cities", {
       country_id: 1,

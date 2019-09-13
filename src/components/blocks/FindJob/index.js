@@ -87,11 +87,33 @@ class FindJob extends PureComponent {
 
   componentDidMount = () => {
     this.props.fetchVacations({
-      skip: 0
+      skip: 0,
+      isAllowToShow: true,
+      'city.id': this.props.selectedCity.id,
+      isNotActive: false
     }, true);
   };
 
-  handleSearchChange = search => this.setState({ search });
+  timer = null;
+
+  handleSearchChange = search => {
+    this.setState({ search });
+
+    if(this.timer) {
+      clearTimeout(this.timer);
+    }
+
+    this.timer = setTimeout(() => {
+      this.props.fetchVacations({
+        skip: 0,
+        name: search,
+        isAllowToShow: true,
+        'city.id': this.props.selectedCity.id,
+        isNotActive: false
+      }, true);
+      this.setState({skip: 20});
+    }, 1000);
+  }
 
   handleBackClick = () => {
     const { goBack, back } = this.props;
@@ -119,7 +141,10 @@ class FindJob extends PureComponent {
       scrollHeight < (clientHeight + scrollTop + (scrollHeight * 10) / 100)
     ) {
       this.props.fetchVacations({
-        skip: this.state.skip
+        skip: this.state.skip,
+        isAllowToShow: true,
+        'city.id': this.props.selectedCity.id,
+        isNotActive: false
       });
       this.setState(prevState => {
         return {
@@ -128,6 +153,12 @@ class FindJob extends PureComponent {
       });
     }
   };
+
+  renderEmpty = () => {
+    return (
+      <div style={{marginLeft: 10}}>Вакансий пока нет</div>
+    )
+  }
 
   renderHeadButton = (
     <HeadButton onClick={this.handleBackClick} data-to="home" />
@@ -219,7 +250,10 @@ class FindJob extends PureComponent {
             </Cell>
           </VkList>
         </HeaderContext>*/}
-        <Search value={this.state.search} onChange={this.handleSearchChange} />
+        <Search
+          value={this.state.search}
+          onChange={this.handleSearchChange}
+        />
         <AutoSizer>
           {({ height, width }) => {
             return (
@@ -231,6 +265,7 @@ class FindJob extends PureComponent {
                   rowHeight={150}
                   rowRenderer={this.renderCell}
                   onScroll={this.handleListScroll}
+                  noRowsRenderer={this.renderEmpty}
                 ></List>
               </>
             );
