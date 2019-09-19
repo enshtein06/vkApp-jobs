@@ -1,8 +1,9 @@
 import { serializeParamsToString } from "../utils";
+import { serverUrl } from '../config';
 
 export const fetchCommomApi = ( url = '' ) => {
   return {
-    action: `/api/${url}`,
+    action: `${serverUrl}${url}`,
     options: {
       method: 'GET'
     }
@@ -12,7 +13,7 @@ export const fetchCommomApi = ( url = '' ) => {
 export const fetchEntitiesList = (params = {}, typeEntity = "") => {
   const paramsString = serializeParamsToString(params);
   return {
-    action: `/api/${typeEntity}${paramsString}`,
+    action: `${serverUrl}${typeEntity}${paramsString}`,
     options: {
       method: "GET"
     }
@@ -21,7 +22,7 @@ export const fetchEntitiesList = (params = {}, typeEntity = "") => {
 
 export const fetchEntity = (entityId = "", typeEntity = "") => {
   return {
-    action: `/api/${typeEntity}/${entityId}`,
+    action: `${serverUrl}${typeEntity}/${entityId}`,
     options: {
       method: "GET"
     }
@@ -30,7 +31,7 @@ export const fetchEntity = (entityId = "", typeEntity = "") => {
 
 export const createEntity = (values = {}, typeEntity = "") => {
   return {
-    action: `/api/${typeEntity}`,
+    action: `${serverUrl}${typeEntity}`,
     options: {
       method: "POST",
       body: JSON.stringify(values)
@@ -40,7 +41,7 @@ export const createEntity = (values = {}, typeEntity = "") => {
 
 export const updateEntity = (entityId = "", values = {}, typeEntity = "") => {
   return {
-    action: `/api/${typeEntity}/${entityId}`,
+    action: `${serverUrl}${typeEntity}/${entityId}`,
     options: {
       method: "PUT",
       body: JSON.stringify(values)
@@ -50,7 +51,7 @@ export const updateEntity = (entityId = "", values = {}, typeEntity = "") => {
 
 export const deleteEntity = (entityId = "", typeEntity = "") => {
   return {
-    action: `/api/${typeEntity}/${entityId}`,
+    action: `${serverUrl}${typeEntity}/${entityId}`,
     options: {
       method: "DELETE"
     }
