@@ -5,8 +5,7 @@ const fetchApi = (params = {}) => async () => {
   const headers = new Headers(params.options.headers || {});
 
   headers.append("Accept", params.type || "application/json;charset=utf-8");
-  if (params.type !== "multipart/form-data")
-    headers.append("Content-Type", params.type || "application/json");
+  headers.append("Content-Type", params.type || "application/json; charset=utf-8");
 
   const response = await fetch(
     params.action,

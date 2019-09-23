@@ -44,6 +44,7 @@ function* initializeVkUserSaga(action) {
     const requestParams = fetchEntity(vkUserId, "users/initialize");
     const fetchParams = yield fetchApi(requestParams);
     const data = yield call(fetchParams);
+    //call(fetch, requestParams.action, requestParams.options);
 
     yield put({
       type: INITIALIZE_VK_USER_DATA_SUCCESS,
