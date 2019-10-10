@@ -4,23 +4,23 @@ self.__precacheManifest = [
     "url": "/vkApp-jobs/static/js/runtime~main.eb698806.js"
   },
   {
-    "revision": "9ea00bfe381b05f91e37",
-    "url": "/vkApp-jobs/static/js/main.83d0e506.chunk.js"
+    "revision": "7f5d31fb608f44805265",
+    "url": "/vkApp-jobs/static/js/main.55fc2fe0.chunk.js"
   },
   {
-    "revision": "a3715c7a3852e8b68e33",
-    "url": "/vkApp-jobs/static/js/2.6bbd26f7.chunk.js"
+    "revision": "2c144b9055d90918fcf1",
+    "url": "/vkApp-jobs/static/js/2.5a327565.chunk.js"
   },
   {
-    "revision": "9ea00bfe381b05f91e37",
+    "revision": "7f5d31fb608f44805265",
     "url": "/vkApp-jobs/static/css/main.c1dfb12a.chunk.css"
   },
   {
-    "revision": "a3715c7a3852e8b68e33",
+    "revision": "2c144b9055d90918fcf1",
     "url": "/vkApp-jobs/static/css/2.cd6d4f6a.chunk.css"
   },
   {
-    "revision": "25a68f61040651341426077a5a2fc2d6",
+    "revision": "4ec94cf728da7f99a2ad819cce3f111d",
     "url": "/vkApp-jobs/index.html"
   }
 ];
